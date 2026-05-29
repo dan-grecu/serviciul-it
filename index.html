@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviciul IT — UMFT</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: rgba(255,255,255,0.07);
+    --accent: #3b82f6;
+    --accent2: #06b6d4;
+    --accent-glow: rgba(59,130,246,0.3);
+    --text: #f1f5f9;
+    --text-muted: #64748b;
+    --text-dim: #94a3b8;
+    --green: #10b981;
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --purple: #8b5cf6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow blob */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: white;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  .logo-text span {
+    color: var(--accent);
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .badge-live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--green);
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 20px;
+    padding: 4px 10px;
+  }
+
+  .badge-live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .btn-refresh {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-refresh:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(59,130,246,0.08);
+  }
+
+  /* ── MAIN ── */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 3rem;
+    padding: 2.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, var(--text) 40%, var(--text-dim));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    max-width: 520px;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Syne', sans-serif;
+    font-size: 8rem;
+    font-weight: 800;
+    color: rgba(59,130,246,0.04);
+    pointer-events: none;
+    user-select: none;
+    line-height: 1;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::before {
+    content: '';
+    width: 3px;
+    height: 16px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* ── TASK LIST ── */
+  .tasks-grid {
+    display: grid;
+    gap: 0.6rem;
+    margin-bottom: 3rem;
+  }
+
+  .task-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .task-item:hover {
+    border-color: rgba(59,130,246,0.3);
+    background: var(--surface2);
+    transform: translateX(4px);
+  }
+
+  .task-priority {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent);
+    text-align: center;
+  }
+
+  .task-info {}
+  .task-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .task-owner {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .task-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .badge-incurs {
+    background: rgba(245,158,11,0.15);
+    color: var(--yellow);
+    border: 1px solid rgba(245,158,11,0.25);
+  }
+  .badge-blocat {
+    background: rgba(239,68,68,0.15);
+    color: var(--red);
+    border: 1px solid rgba(239,68,68,0.25);
+  }
+  .badge-neinceput {
+    background: rgba(100,116,139,0.15);
+    color: var(--text-muted);
+    border: 1px solid rgba(100,116,139,0.2);
+  }
+  .badge-finalizat {
+    background: rgba(16,185,129,0.15);
+    color: var(--green);
+    border: 1px solid rgba(16,185,129,0.25);
+  }
+
+  .task-date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  /* ── PLANIFICATOR ── */
+  .embed-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+
+  .embed-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+
+  .embed-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+  }
+
+  .embed-wrapper iframe {
+    width: 100%;
+    height: 420px;
+    border: none;
+    display: block;
+  }
+
+  /* ── RESURSE GRID ── */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+  }
+
+  .resource-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resource-card::after {
+    content: '↗';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+
+  .resource-card:hover {
+    border-color: var(--accent);
+    background: var(--surface2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(59,130,246,0.1);
+  }
+
+  .resource-card:hover::after {
+    color: var(--accent);
+    transform: translate(2px, -2px);
+  }
+
+  .resource-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+
+  .resource-label {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .resource-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  .icon-wifi    { background: rgba(59,130,246,0.15); }
+  .icon-prog    { background: rgba(139,92,246,0.15); }
+  .icon-poze    { background: rgba(6,182,212,0.15); }
+  .icon-docs    { background: rgba(245,158,11,0.15); }
+  .icon-azure   { background: rgba(59,130,246,0.15); }
+  .icon-powerbi { background: rgba(239,68,68,0.15); }
+  .icon-cursit  { background: rgba(16,185,129,0.15); }
+  .icon-hr      { background: rgba(236,72,153,0.15); }
+
+  /* ── NOTICE ── */
+  .notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 1rem 1.25rem;
+    background: rgba(59,130,246,0.07);
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: 12px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-bottom: 3rem;
+  }
+
+  .notice-icon {
+    flex-shrink: 0;
+    font-size: 1rem;
+    margin-top: 1px;
+  }
+
+  .notice strong {
+    color: var(--accent);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero          { animation: fadeUp 0.5s ease both; }
+  .notice        { animation: fadeUp 0.5s 0.1s ease both; }
+  .tasks-grid    { animation: fadeUp 0.5s 0.15s ease both; }
+  .embed-wrapper { animation: fadeUp 0.5s 0.2s ease both; }
+  .resources-grid{ animation: fadeUp 0.5s 0.25s ease both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    main { padding: 1.5rem 1rem 3rem; }
+    .task-item { grid-template-columns: 30px 1fr; }
+    .task-date { display: none; }
+    .hero-bg-text { display: none; }
+    .resources-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">IT</div>
+    <div class="logo-text">Serviciul <span>IT</span></div>
+  </a>
+  <div class="header-right">
+    <div class="badge-live">Online</div>
+    <button class="btn-refresh" onclick="location.reload()">
+      ↻ Refresh
+    </button>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-label">UMFT · Departament Tehnic</div>
+      <h1>Panou de control<br>Serviciul IT</h1>
+      <p>Urmărește task-urile active, accesează resursele partajate și planifică activitățile echipei. Numărul de ordine reprezintă <strong style="color:var(--accent)">prioritatea</strong>.</p>
+    </div>
+    <div class="hero-bg-text">IT</div>
+  </div>
+
+  <!-- NOTICE -->
+  <div class="notice">
+    <span class="notice-icon">💬</span>
+    <div>
+      <strong>Comunicare echipă:</strong> Task-urile se realizează comunicat între voi. La finalizarea unui task, trimiteți mesaj pe <strong>grupul de WhatsApp</strong>. Folosiți butonul <strong>Refresh</strong> din header pentru a vedea ultimele modificări.
+    </div>
+  </div>
+
+  <!-- TASK LIST -->
+  <div class="section-header">
+    <div class="section-title">Lista Task-uri Active</div>
+  </div>
+
+  <div class="tasks-grid" id="tasklist">
+
+    <div class="task-item">
+      <div class="task-priority">1</div>
+      <div class="task-info">
+        <div class="task-name">Activitate</div>
+        <div class="task-owner">daniela.surugiu@umft.ro · Daniela</div>
+      </div>
+      <div class="task-badge badge-incurs">În curs</div>
+      <div class="task-date">dd.mm.yyyy</div>
+    </div>
+
+    <div class="task-item">
+      <div class="task-priority">2</div>
+      <div class="task-info">
+        <div class="task-name">Activitate</div>
+        <div class="task-owner">robert.burdusel@umft.ro · Robert</div>
+      </div>
+      <div class="task-badge badge-incurs">În curs</div>
+      <div class="task-date">dd.mm.yyyy</div>
+    </div>
+
+    <div class="task-item">
+      <div class="task-priority">3</div>
+      <div class="task-info">
+        <div class="task-name">Activitate</div>
+        <div class="task-owner">ionut.simion@umft.ro · Ionuț</div>
+      </div>
+      <div class="task-badge badge-blocat">Blocat</div>
+      <div class="task-date">dd.mm.yyyy</div>
+    </div>
+
+    <div class="task-item">
+      <div class="task-priority">4</div>
+      <div class="task-info">
+        <div class="task-name">Activitate</div>
+        <div class="task-owner">lavinia.gorban@umft.ro · Lavinia</div>
+      </div>
+      <div class="task-badge badge-neinceput">Neînceput</div>
+      <div class="task-date">dd.mm.yyyy</div>
+    </div>
+
+  </div>
+
+  <!-- PLANIFICATOR -->
+  <div class="section-header">
+    <div class="section-title">Planificator Eveniment</div>
+  </div>
+
+  <div class="embed-wrapper">
+    <div class="embed-header">
+      <div class="embed-dot"></div>
+      Planificator sincronizat cu Google Sheets · <span style="color:var(--text-muted);font-size:0.78rem">înlocuiește URL-ul iframe de mai jos cu link-ul tău de embed</span>
+    </div>
+    <!-- 
+      !! ÎNLOCUIEȘTE src="" cu link-ul tău Google Sheets embed !!
+      În Google Sheets: Fișier → Publicare pe web → Selectează foaia → Embed → Copiază URL
+    -->
+    <iframe
+      src="about:blank"
+      title="Planificator Eveniment"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <!-- RESURSE DRIVE -->
+  <div class="section-header">
+    <div class="section-title">Resurse partajate în Drive</div>
+  </div>
+
+  <div class="resources-grid">
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-wifi">📶</div>
+      <div class="resource-label">WiFi UMFT</div>
+      <div class="resource-desc">Credențiale rețele wireless instituționale</div>
+    </a>
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-prog">💻</div>
+      <div class="resource-label">Programe UMFT</div>
+      <div class="resource-desc">Licențe și software aprobat</div>
+    </a>
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-poze">🖼️</div>
+      <div class="resource-label">Poze UMFT</div>
+      <div class="resource-desc">Galerie foto instituțională</div>
+    </a>
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-docs">📄</div>
+      <div class="resource-label">Documente IT</div>
+      <div class="resource-desc">Proceduri, politici și formulare IT</div>
+    </a>
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-azure">☁️</div>
+      <div class="resource-label">Cursuri Azure</div>
+      <div class="resource-desc">Materiale Microsoft Azure</div>
+    </a>
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-powerbi">📊</div>
+      <div class="resource-label">Cursuri Power BI</div>
+      <div class="resource-desc">Materiale de training Power BI</div>
+    </a>
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-cursit">🖥️</div>
+      <div class="resource-label">Cursuri IT</div>
+      <div class="resource-desc">Resurse generale IT & training</div>
+    </a>
+
+    <a href="#" class="resource-card">
+      <div class="resource-icon icon-hr">👥</div>
+      <div class="resource-label">HR</div>
+      <div class="resource-desc">Documente și resurse de personal</div>
+    </a>
+
+  </div>
+
+</main>
+
+<footer>
+  Serviciul IT · UMFT Timișoara · <span id="year"></span>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
